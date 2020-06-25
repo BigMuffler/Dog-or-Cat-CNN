@@ -33,11 +33,11 @@ test_set = test_datagen.flow_from_directory(
 cnn = tf.keras.models.Sequential()
 #Convolution
 #Each filter is randomly generated via the keras library
-cnn.add(tf.keras.layers.Conv2D(filters = 32, kernel_size = 3, activation = 'relu', input_shape = [64,64,3]))
+cnn.add(tf.keras.layers.Conv2D(filters = 64, kernel_size = 5, activation = 'relu', input_shape = [64,64,3]))
 #Max Pooling
 cnn.add(tf.keras.layers.MaxPool2D(pool_size = 2, strides = 2))
 #Add second convolutional layer
-cnn.add(tf.keras.layers.Conv2D(filters = 32, kernel_size = 3, activation = 'relu'))
+cnn.add(tf.keras.layers.Conv2D(filters = 64, kernel_size = 5, activation = 'relu'))
 cnn.add(tf.keras.layers.MaxPool2D(pool_size = 2, strides = 2))
 
 #Flattening the Result of the Convolutions to a 1-D Vector
@@ -46,15 +46,16 @@ cnn.add(tf.keras.layers.Flatten())
 
 #Making the full connection
 cnn.add(tf.keras.layers.Dense(units=128, activation ='relu'))
+cnn.add(tf.keras.layers.Dense(units=128, activation ='relu'))
 #OuputLayer
-cnn.add(tf.keras.layers.Dense(units=1, activation ='sigmoid'))
+cnn.add(tf.keras.layers.Dense(units=2, activation ='softmax'))
 
 #Training the CNN
-cnn.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
-cnn.fit(x = training_set, validation_data = test_set, epochs = 100)
+cnn.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
+cnn.fit(x = training_set, validation_data = test_set, epochs = 30)
 
 #Making Predictions
-test_image = image.load_img('dataset/single_prediction/cat2.jpg', target_size = (64,64))
+test_image = image.load_img('dataset/single_prediction/cat7.jpg', target_size = (64,64))
 #Convert PIL Image format to array 
 test_image = image.img_to_array(test_image)
 test_image = np.expand_dims(test_image, axis = 0) #something to do with batch size
